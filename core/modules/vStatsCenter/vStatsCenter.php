@@ -25,8 +25,8 @@ class vStatsCenter extends CodonModule {
             return;
         }
 		
-		$month = $_GET['month'];
-		$year = $_GET['year'];
+		$month = intval($_GET['month']);
+		$year = intval($_GET['year']);
 		
 		$start = StatsData::GetStartDate();
         $this->set('startmonth', date('m', strtotime($start->submitdate)));
