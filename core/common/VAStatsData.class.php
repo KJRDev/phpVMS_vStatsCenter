@@ -14,49 +14,49 @@ This module is only use for phpVMS (www.phpvms.net) - (A Virtual Airline Admin S
 class VAStatsData extends CodonData {
 	
 	public function monthly_flight_stats($month, $year) {
-        $query = "SELECT * FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = '$month' AND YEAR(submitdate) = '$year' AND accepted = 1";
+        	$query = "SELECT * FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = '".DB::escape($month)."' AND YEAR(submitdate) = '".DB::escape($year)."' AND accepted = 1";
 		$results = DB::get_results($query);
 		return DB::num_rows($results);
     }
 	
 	public function monthly_hours_stats($month, $year) {
-		$query = "SELECT SUM(flighttime) AS hours FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = {$month} AND YEAR(submitdate) = {$year} AND accepted = 1";
+		$query = "SELECT SUM(flighttime) AS hours FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->hours;
 	}
 	
 	public function monthly_miles_stats($month, $year) {
-		$query = "SELECT SUM(distance) AS distance FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = {$month} AND YEAR(submitdate) = {$year} AND accepted = 1";
+		$query = "SELECT SUM(distance) AS distance FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->distance;
 	}
 	
 	public function monthly_fuelused_stats($month, $year) {
-		$query = "SELECT SUM(fuelused) AS fuelused FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = {$month} AND YEAR(submitdate) = {$year} AND accepted = 1";
+		$query = "SELECT SUM(fuelused) AS fuelused FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->fuelused;
 	}
 	
 	public function monthly_pax_stats($month, $year) {
-		$query = "SELECT SUM(`load`) AS passengers FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = {$month} AND YEAR(submitdate) = {$year} AND accepted = 1";
+		$query = "SELECT SUM(`load`) AS passengers FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->passengers;
 	}
 	
 	public function monthly_new_pilots($month, $year) {
-		$query = "SELECT * FROM " . TABLE_PREFIX . "pilots WHERE MONTH(joindate) = {$month} AND YEAR(joindate) = {$year} AND confirmed = 1 AND retired = 0";
+		$query = "SELECT * FROM " . TABLE_PREFIX . "pilots WHERE MONTH(joindate) = ".DB::escape($month)." AND YEAR(joindate) = ".DB::escape($year)." AND confirmed = 1 AND retired = 0";
 		$results = DB::get_results($query);
 		return DB::num_rows($results);
 	}
 	
 	public function monthly_avg_landing_rate($month, $year) {
-		$query = "SELECT AVG(landingrate) AS rate FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = {$month} AND YEAR(submitdate) = {$year} AND landingrate != 0 AND accepted = 1";
+		$query = "SELECT AVG(landingrate) AS rate FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND landingrate != 0 AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->rate;
 	}
 	
 	public function monthly_awards_count($month, $year) {
-		$query = "SELECT * FROM " . TABLE_PREFIX . "awardsgranted WHERE MONTH(dateissued) = {$month} AND YEAR(dateissued) = {$year}";
+		$query = "SELECT * FROM " . TABLE_PREFIX . "awardsgranted WHERE MONTH(dateissued) = ".DB::escape($month)." AND YEAR(dateissued) = ".DB::escape($year);
 		$results = DB::get_results($query);
 		return DB::num_rows($results);
 	}
@@ -65,7 +65,7 @@ class VAStatsData extends CodonData {
 		$query = "SELECT f.*, SUM(f.distance) as distance, p.* 
 				  FROM " . TABLE_PREFIX . "pireps f
                   LEFT JOIN " . TABLE_PREFIX . "pilots p ON p.pilotid = f.pilotid
-				  WHERE MONTH(f.submitdate) = {$month} AND YEAR(f.submitdate) = {$year} AND f.accepted = 1 AND p.retired = 0
+				  WHERE MONTH(f.submitdate) = ".DB::escape($month)." AND YEAR(f.submitdate) = ".DB::escape($year)." AND f.accepted = 1 AND p.retired = 0
 				  GROUP BY f.pilotid
 				  ORDER BY distance DESC
 				  LIMIT 5";		
@@ -78,7 +78,7 @@ class VAStatsData extends CodonData {
 		$query = "SELECT f.*, SUM(f.flighttime) as time, p.* 
 				  FROM " . TABLE_PREFIX . "pireps f
                   LEFT JOIN " . TABLE_PREFIX . "pilots p ON p.pilotid = f.pilotid
-                  WHERE MONTH(f.submitdate) = {$month} AND YEAR(f.submitdate) = {$year} AND f.accepted = 1 AND p.retired = 0
+                  WHERE MONTH(f.submitdate) = ".DB::escape($month)." AND YEAR(f.submitdate) = ".DB::escape($year)." AND f.accepted = 1 AND p.retired = 0
                   GROUP BY f.pilotid
 				  ORDER BY time DESC
                   LIMIT 5";
@@ -91,7 +91,7 @@ class VAStatsData extends CodonData {
 	    $query = "SELECT f.*, p.*, COUNT(*) AS flights
 				  FROM " . TABLE_PREFIX . "pireps f
 				  LEFT JOIN " . TABLE_PREFIX . "pilots p ON p.pilotid = f.pilotid
-				  WHERE MONTH(f.submitdate) = {$month} AND YEAR(f.submitdate) = {$year} AND f.accepted = 1 AND p.retired = 0
+				  WHERE MONTH(f.submitdate) = ".DB::escape($month)." AND YEAR(f.submitdate) = ".DB::escape($year)." AND f.accepted = 1 AND p.retired = 0
 				  GROUP BY f.pilotid
 				  ORDER BY flights DESC
 				  LIMIT 5";
@@ -104,7 +104,7 @@ class VAStatsData extends CodonData {
 		$query = "SELECT l.*, UNIX_TIMESTAMP(l.dateissued) as dateissued, p.*, e.*
 				  FROM " . TABLE_PREFIX . "awardsgranted l
 				  LEFT JOIN " . TABLE_PREFIX . "awards p ON p.awardid = l.awardid
-				  LEFT JOIN " . TABLE_PREFIX . "pilots e ON e.pilotid = l.pilotid WHERE e.retired = 0 AND MONTH(l.dateissued) = {$month} AND YEAR(l.dateissued) = {$year}
+				  LEFT JOIN " . TABLE_PREFIX . "pilots e ON e.pilotid = l.pilotid WHERE e.retired = 0 AND MONTH(l.dateissued) = ".DB::escape($month)." AND YEAR(l.dateissued) = ".DB::escape($year)."
 				  ORDER BY dateissued ASC";
 		$results = DB::get_results($query);
 		return $results;
@@ -121,7 +121,7 @@ class VAStatsData extends CodonData {
 				  LEFT JOIN " . TABLE_PREFIX . "airports AS dep ON dep.icao = p.depicao
 				  LEFT JOIN " . TABLE_PREFIX . "airports AS arr ON arr.icao = p.arricao 
 				  LEFT JOIN " . TABLE_PREFIX . "pilots u ON u.pilotid = p.pilotid
-				  WHERE MONTH(submitdate) = {$month} AND YEAR(submitdate) = {$year} AND p.landingrate != 0 AND p.accepted = 1 AND u.retired = 0
+				  WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND p.landingrate != 0 AND p.accepted = 1 AND u.retired = 0
 				  ORDER BY p.landingrate DESC
 				  LIMIT 5";
 		$results = DB::get_results($query);
