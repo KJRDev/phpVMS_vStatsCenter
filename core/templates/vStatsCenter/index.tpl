@@ -102,6 +102,14 @@ endwhile;
 </thead>
 <tbody>
 <?php
+if(!$awards)
+{
+?>
+<tr><td colspan="4">No Awards has been granted!</td></tr>
+<?php
+}
+else
+{
 foreach($awards as $awd)
 {
 ?>
@@ -112,6 +120,7 @@ foreach($awards as $awd)
     <td align="center"><?php echo date("F j, Y", $awd->dateissued); ?></td>
 </tr>
 <?php
+}
 }
 ?>
 </tbody>
@@ -132,6 +141,14 @@ foreach($awards as $awd)
 </thead>
 <tbody>
 <?php
+if(!$greasedland)
+{
+?>
+<tr><td colspan="6">No landings has been greased yet!</td></tr>
+<?php
+}
+else
+{
 $ranklanding = 1;
 foreach($greasedland as $flight)
 {
@@ -148,6 +165,7 @@ foreach($greasedland as $flight)
 </tr>
 <?php
 $ranklanding = 1 + $ranklanding;
+}
 }
 ?>
 </tbody>
@@ -166,10 +184,17 @@ $ranklanding = 1 + $ranklanding;
 </thead>
 <tbody>
 <?php
+if(!$topdistance)
+{
+?>
+<tr><td colspan="4">No pilots has flew that far yet!</td></tr>
+<?php
+}
+else
+{
 $rankdis = 1;
 foreach($topdistance as $dis)
 {
-
 ?>
 <tr>
 	<td align="center"><?php echo $rankdis;?></td>
@@ -179,6 +204,7 @@ foreach($topdistance as $dis)
 </tr>
 <?php
 $rankdis = 1 + $rankdis;
+}
 }
 ?>
 </tbody>
@@ -196,6 +222,16 @@ $rankdis = 1 + $rankdis;
 </tr>
 </thead>
 <tbody>
+<?php 
+if(!$topflight)
+{
+?>
+<tr><td colspan="4">No Top Flight Time Yet!</td></tr>
+<?php
+}
+else
+{
+?>
 <?php
 $ranktime = 1;
 foreach($topflight as $ptime)
@@ -210,13 +246,14 @@ foreach($topflight as $ptime)
 <?php
 $ranktime = 1 + $ranktime;
 }
+}
 ?>
 </tbody>
 </table>
 
 <table align="center">
 <thead>
-<th colspan="4">Top Flights Pilots</th>
+<th colspan="4">Top Flights Count Pilots</th>
 <tr>
 	<th>Rank</th>
 	<th>Pilot ID</th>
@@ -227,10 +264,17 @@ $ranktime = 1 + $ranktime;
 </thead>
 <tbody>
 <?php
+if(!$numflights)
+{
+?>
+<tr><td colspan="4">No Top Flight Counts Yet!</td></tr>
+<?php
+}
+else
+{
 $rankflights = 1;
 foreach($numflights as $numflt)
 {
-
 ?>
 <tr>
 	<td align="center"><?php echo $rankflights;?></td>
@@ -240,6 +284,7 @@ foreach($numflights as $numflt)
 </tr>
 <?php
 $rankflights = 1 + $rankflights;
+}
 }
 ?>
 </tbody>
