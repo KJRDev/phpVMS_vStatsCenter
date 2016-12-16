@@ -17,10 +17,4 @@ HOW TO USE THIS MODULE:
 
 A simple nav. to the module page...
 
-LEAVE THE $month and $year VARIABLES ALONE OR THE LINK WON'T FUNCTION PROPERLY!
-
-<?php
-$month = date(n);
-$year = date(Y);
-?>
-<a href="<?php echo url('/vStatsCenter/index?month='.$month.'&year='.$year.'') ?>">vStatsCenter</a>
+<a href="<?php echo url('/vStatsCenter/index/'.date(n).'/'.date(Y).') ?>">vStatsCenter</a>
