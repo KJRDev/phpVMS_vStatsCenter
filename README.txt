@@ -18,4 +18,4 @@ HOW TO USE THIS MODULE:
 
 A simple nav. to the module page...
 
-<a href="<?php echo url('/vStatsCenter/index/'.date(n).'/'.date(Y).') ?>">vStatsCenter</a>
+<a href="<?php echo url('/vStatsCenter/index/'.date(n).'/'.date(Y)) ?>">vStatsCenter</a>
