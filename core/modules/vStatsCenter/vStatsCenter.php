@@ -11,31 +11,28 @@ This module is only use for phpVMS (www.phpvms.net) - (A Virtual Airline Admin S
 **/
 
 // Version 1.0 (May.23.12) - Module Created
+// Version 1.1 (December 16, 2016) - Updated for a clean URL and correct template extension
 class vStatsCenter extends CodonModule {
 	
 	public $title = 'vStatsCenter';
 	
-	public function index()
+	public function index($month, $year)
 	{
-		//Whenever your pages are public, you could be running into a risk of bots exessively running this page.
-		//This page has tons of queries to run to return the real-time stats, if I were you, I would require login first as it's already done for you.
-		 if (!Auth::LoggedIn()) {
+		//require login
+		if (!Auth::LoggedIn()) {
             $this->set('message', 'You must be logged in to view this page!');
             $this->render('core_error.tpl');
             return;
         }
-		
-		$month = intval($_GET['month']);
-		$year = intval($_GET['year']);
-		
+		//set up the data
 		$start = StatsData::GetStartDate();
         $this->set('startmonth', date('m', strtotime($start->submitdate)));
         $this->set('startyear', date('Y', strtotime($start->submitdate)));
         $this->set('today', getdate());
-		
-		$this->set('month', $month);
-        $this->set('year', $year);
-		
+		//set the dates
+		$this->set('month', intval($month));
+        $this->set('year', intval($year));
+		//get the following data
 		$this->set('flightcount', VAStatsData::monthly_flight_stats($month, $year));
 		$this->set('flighthours', VAStatsData::monthly_hours_stats($month, $year));
 		$this->set('flightmiles', VAStatsData::monthly_miles_stats($month, $year));
@@ -49,8 +46,8 @@ class vStatsCenter extends CodonModule {
 		$this->set('topdistance', VAStatsData::monthly_pilot_distance($month, $year));
 		$this->set('topflight', VAStatsData::monthly_pilot_flighttime($month, $year));
 		$this->set('numflights', VAStatsData::monthly_pilot_flights($month, $year));
-		
-		$this->render('vStatsCenter/index.tpl');
+		//render page
+		$this->render('vStatsCenter/index.php');
 	}
 
 }

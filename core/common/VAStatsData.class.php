@@ -11,6 +11,7 @@ This module is only use for phpVMS (www.phpvms.net) - (A Virtual Airline Admin S
 **/
 
 // Version 1.0 (May.23.12) - Module Created
+// Version 1.1 (December 16, 2016) - Updated for a clean URL and correct template extension
 class VAStatsData extends CodonData {
 	
 	public function monthly_flight_stats($month, $year) {
