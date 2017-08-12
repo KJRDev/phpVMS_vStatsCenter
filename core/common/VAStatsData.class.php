@@ -5,64 +5,65 @@ Module Created By Vansers
 This module is only use for phpVMS (www.phpvms.net) - (A Virtual Airline Admin Software)
 
 @Created By Vansers
-@Copyrighted @ 2011
+@Copyrighted @ 2017
 @Under CC 3.0
 @http://creativecommons.org/licenses/by-nc-sa/3.0/
 **/
 
 // Version 1.0 (May.23.12) - Module Created
 // Version 1.1 (December 16, 2016) - Updated for a clean URL and correct template extension
+// Version 1.1.1 (Cleaned Up code, fixed static errors)
 class VAStatsData extends CodonData {
 	
-	public function monthly_flight_stats($month, $year) {
-        	$query = "SELECT * FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = '".DB::escape($month)."' AND YEAR(submitdate) = '".DB::escape($year)."' AND accepted = 1";
+	public static function monthly_flight_stats($month, $year) {
+		$query = "SELECT * FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = '".DB::escape($month)."' AND YEAR(submitdate) = '".DB::escape($year)."' AND accepted = 1";
 		$results = DB::get_results($query);
 		return DB::num_rows($results);
     }
 	
-	public function monthly_hours_stats($month, $year) {
+	public static function monthly_hours_stats($month, $year) {
 		$query = "SELECT SUM(flighttime) AS hours FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->hours;
 	}
 	
-	public function monthly_miles_stats($month, $year) {
+	public static function monthly_miles_stats($month, $year) {
 		$query = "SELECT SUM(distance) AS distance FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->distance;
 	}
 	
-	public function monthly_fuelused_stats($month, $year) {
+	public static function monthly_fuelused_stats($month, $year) {
 		$query = "SELECT SUM(fuelused) AS fuelused FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->fuelused;
 	}
 	
-	public function monthly_pax_stats($month, $year) {
+	public static function monthly_pax_stats($month, $year) {
 		$query = "SELECT SUM(`load`) AS passengers FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->passengers;
 	}
 	
-	public function monthly_new_pilots($month, $year) {
+	public static function monthly_new_pilots($month, $year) {
 		$query = "SELECT * FROM " . TABLE_PREFIX . "pilots WHERE MONTH(joindate) = ".DB::escape($month)." AND YEAR(joindate) = ".DB::escape($year)." AND confirmed = 1 AND retired = 0";
 		$results = DB::get_results($query);
 		return DB::num_rows($results);
 	}
 	
-	public function monthly_avg_landing_rate($month, $year) {
+	public static function monthly_avg_landing_rate($month, $year) {
 		$query = "SELECT AVG(landingrate) AS rate FROM " . TABLE_PREFIX . "pireps WHERE MONTH(submitdate) = ".DB::escape($month)." AND YEAR(submitdate) = ".DB::escape($year)." AND landingrate != 0 AND accepted = 1";
 		$result = DB::get_row($query);
 		return $result->rate;
 	}
 	
-	public function monthly_awards_count($month, $year) {
+	public static function monthly_awards_count($month, $year) {
 		$query = "SELECT * FROM " . TABLE_PREFIX . "awardsgranted WHERE MONTH(dateissued) = ".DB::escape($month)." AND YEAR(dateissued) = ".DB::escape($year);
 		$results = DB::get_results($query);
 		return DB::num_rows($results);
 	}
 	
-	public function monthly_pilot_distance($month, $year) {
+	public static function monthly_pilot_distance($month, $year) {
 		$query = "SELECT f.*, SUM(f.distance) as distance, p.* 
 				  FROM " . TABLE_PREFIX . "pireps f
                   LEFT JOIN " . TABLE_PREFIX . "pilots p ON p.pilotid = f.pilotid
@@ -75,7 +76,7 @@ class VAStatsData extends CodonData {
 		return $results;
 	}
 	
-	public function monthly_pilot_flighttime($month, $year) {
+	public static function monthly_pilot_flighttime($month, $year) {
 		$query = "SELECT f.*, SUM(f.flighttime) as time, p.* 
 				  FROM " . TABLE_PREFIX . "pireps f
                   LEFT JOIN " . TABLE_PREFIX . "pilots p ON p.pilotid = f.pilotid
@@ -88,7 +89,7 @@ class VAStatsData extends CodonData {
 		return $results;
 	}
 	
-	public function monthly_pilot_flights($month, $year) {
+	public static function monthly_pilot_flights($month, $year) {
 	    $query = "SELECT f.*, p.*, COUNT(*) AS flights
 				  FROM " . TABLE_PREFIX . "pireps f
 				  LEFT JOIN " . TABLE_PREFIX . "pilots p ON p.pilotid = f.pilotid
@@ -101,7 +102,7 @@ class VAStatsData extends CodonData {
 		return $results;
 	}
 	
-	public function monthly_awards($month, $year) {
+	public static function monthly_awards($month, $year) {
 		$query = "SELECT l.*, UNIX_TIMESTAMP(l.dateissued) as dateissued, p.*, e.*
 				  FROM " . TABLE_PREFIX . "awardsgranted l
 				  LEFT JOIN " . TABLE_PREFIX . "awards p ON p.awardid = l.awardid

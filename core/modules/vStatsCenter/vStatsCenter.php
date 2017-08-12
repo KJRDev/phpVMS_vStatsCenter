@@ -5,13 +5,14 @@ Module Created By Vansers
 This module is only use for phpVMS (www.phpvms.net) - (A Virtual Airline Admin Software)
 
 @Created By Vansers
-@Copyrighted @ 2011
+@Copyrighted @ 2017
 @Under CC 3.0
 @http://creativecommons.org/licenses/by-nc-sa/3.0/
 **/
 
 // Version 1.0 (May.23.12) - Module Created
 // Version 1.1 (December 16, 2016) - Updated for a clean URL and correct template extension
+// Version 1.1.1 (Cleaned Up code, fixed static errors)
 class vStatsCenter extends CodonModule {
 	
 	public $title = 'vStatsCenter';
@@ -20,18 +21,19 @@ class vStatsCenter extends CodonModule {
 	{
 		//require login
 		if (!Auth::LoggedIn()) {
-            $this->set('message', 'You must be logged in to view this page!');
-            $this->render('core_error.tpl');
-            return;
-        }
+		    $this->set('message', 'You must be logged in to view this page!');
+		    $this->show('core_error');
+		    return;
+		}
+		
 		//set up the data
 		$start = StatsData::GetStartDate();
-        $this->set('startmonth', date('m', strtotime($start->submitdate)));
-        $this->set('startyear', date('Y', strtotime($start->submitdate)));
-        $this->set('today', getdate());
+        	$this->set('startmonth', date('m', strtotime($start->submitdate)));
+        	$this->set('startyear', date('Y', strtotime($start->submitdate)));
+        	$this->set('today', getdate());
 		//set the dates
 		$this->set('month', intval($month));
-        $this->set('year', intval($year));
+        	$this->set('year', intval($year));
 		//get the following data
 		$this->set('flightcount', VAStatsData::monthly_flight_stats($month, $year));
 		$this->set('flighthours', VAStatsData::monthly_hours_stats($month, $year));
@@ -46,8 +48,9 @@ class vStatsCenter extends CodonModule {
 		$this->set('topdistance', VAStatsData::monthly_pilot_distance($month, $year));
 		$this->set('topflight', VAStatsData::monthly_pilot_flighttime($month, $year));
 		$this->set('numflights', VAStatsData::monthly_pilot_flights($month, $year));
+		
 		//render page
-		$this->render('vStatsCenter/index.php');
+		$this->show('vStatsCenter/index');
 	}
 
 }
